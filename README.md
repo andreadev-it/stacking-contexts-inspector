@@ -1,7 +1,13 @@
 # Stacking Contexts Inspector
-The Stacking Contexts Inspector is a devtools extension that allows you to analyse the stacking contexts available on a webpage. Here you will find all the informations you need to get up and running with using this tool.
+The Stacking Contexts Inspector is a [devtools extension for Google Chrome](https://chrome.google.com/webstore/detail/css-stacking-context-insp/apjeljpachdcjkgnamgppgfkmddadcki) that allows you to analyse the stacking contexts available on a webpage. Here you will find all the informations you need to get up and running with using this tool.
 
 This extension will add a new panel to the devtools, and a new sidebar on the elements panel.
+
+### Known bugs and things to keep in mind
+* This extension work by analysing the page at a specific point in time (when you open the panel or the sidebar). It won't automatically react to changes in the page. However, you can use the reload button on the top of the stacking context panel to re-analyse the page at any time.
+* Currently, when you install this extension you won't be able to inspect contexts within pages that were already open before the installation. You have to reload them to see their stacking contexts.
+
+If you find any other issue or have some feature request, feel free to use the [Issues section](https://github.com/andreadev-it/stacking-contexts-inspector/issues) here on github to share them.
 
 ## The Stacking Contexts panel
 This panel will show you a tree-like representation of all the stacking contexts available on the page.
