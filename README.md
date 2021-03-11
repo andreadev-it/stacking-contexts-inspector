@@ -16,7 +16,7 @@ This panel will show you a tree-like representation of all the stacking contexts
 
 When hovering over a context, the DOM element will be highlighted in the page. If you don't see any highlight, it might be because the element is not visible, or it's outside of the viewport.
 
-When you right-click on a context (everywhere in within the extension), you get a menu with two actions: **Inspect** and **Scroll into view**.
+When you right-click on a context (everywhere within the extension), you get a menu with two actions: **Inspect** and **Scroll into view**.
 
 **Inspect** will select the DOM element in the elements panel. *Scroll into view* will scroll the page in order to show the DOM element related to the context.
 
