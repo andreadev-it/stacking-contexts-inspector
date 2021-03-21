@@ -5,12 +5,12 @@ This extension will add a **new panel** to the devtools and a **new sidebar** on
 
 ### Known bugs and things to keep in mind
 * This extension work by analysing the page at a specific point in time (when you open the panel or the sidebar). It won't automatically react to changes in the page. However, you can use the reload button on the top of the stacking context panel to re-analyse the page at any time.
-* **Fixed in v.1.1.0:** Currently, when you install this extension you won't be able to inspect contexts within pages that were already open before the installation. You have to reload them to see their stacking contexts.
+* This extension can't currently analyse third-party iframes within the page (work in progress).
 
 If you find any other issue or have some feature request, feel free to use the [Issues section](https://github.com/andreadev-it/stacking-contexts-inspector/issues) here on github to share them.
 
 ## The Stacking Contexts panel
-This panel will show you a tree-like representation of all the stacking contexts available on the page.
+This panel will show you a tree-like representation of all the stacking contexts available on the page. It will also show some "containers" that represent the document that the stacking contexts reside within (useful to instantly see which stacking contexts were found within iframes). These containers will be shown with a bold, italic font and a grey color (the `#document` root is an exemple of a container).
 
 ![Screenshot of the Stacking Contexts panel in devtools](docs/panel-screenshot.png)
 
@@ -35,6 +35,8 @@ In the second section, you can find a list of all the stacking contexts that are
 When you install this extension, a new sidebar will be added to the right of the elements panel, where you can also find the "Styles", "Computed", "Layout" and other sidebars. It might not be immediatly visible, in that case you can make the sidebar larger to show all options, or click on the "»" button in the top-right to show all the hidden sidebars names.
 
 ![Screenshot of the Stacking Contexts sidebar in the elements panel](docs/sidebar-screenshot.png)
+
+In the first option bar, you can see a button with a "refresh" icon (on the right of "Node details"). Press that button whenever there are some changes in the page that could impact the stacking contexts.
 
 The sidebar is divided into multiple sections:
 
