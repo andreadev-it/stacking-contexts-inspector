@@ -12,7 +12,7 @@
   "devDependencies": {
     "@babel/core": "^7.13.8",
     "@parcel/config-default": "^2.0.0-beta.1",
-    "@parcel/transformer-js": "^2.0.0-alpha.3",
+    "@parcel/transformer-js": "^2.0.0-beta.1",
     "@parcel/transformer-svg-react": "^2.0.0-nightly.1739",
     "@svgr/parcel-plugin-svgr": "^5.5.0",
     "parcel": "^2.0.0-beta.1",
@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@andreadev/bg-script": "^1.1.6",
-    "@parcel/transformer-raw": "^2.0.0-alpha.3",
+    "@parcel/transformer-raw": "^2.0.0-beta.1",
     "preact": "^10.5.12"
   },
   "browserslist": [
