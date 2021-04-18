@@ -1,0 +1,24 @@
+#panelRoot {
+    display: grid;
+    grid-template-areas:
+        "menu    menu"
+        "content sidepane";
+    grid-template-rows: auto 1fr;
+    grid-template-columns: 1fr auto;
+    height: 100vh;
+}
+
+#panelMenu {
+    grid-area: menu;
+    border-top: solid 0px;
+}
+
+#panelTree {
+    grid-area: content;
+    overflow: auto;
+}
+
+#panelSidepane {
+    grid-area: sidepane;
+    overflow: auto;
+}

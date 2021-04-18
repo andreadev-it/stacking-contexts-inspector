@@ -1,0 +1,19 @@
+:global {
+    @import './colors.scss';
+}
+
+html, body {
+    height: 100%;
+    margin: 0px;
+}
+
+body {
+    font-size: 12px;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+:global(.inline-icon) svg {
+    width: 15px;
+    height: 15px;
+    vertical-align: bottom;
+}

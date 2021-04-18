@@ -1,0 +1,54 @@
+.context {
+    position: relative;
+    padding: 3px 5px;
+    cursor: default;
+    flex-grow: 1;
+    overflow: hidden;
+    font-family: 'consolas', 'lucida console', 'courier new', monospace;
+    
+    &:hover { 
+        background-color: var(--contextHoverBg);
+    }
+
+    .contextTag {
+        font-weight: bold;
+        color: var(--elementTagNameColor);
+    }
+
+    .contextId {
+        color: var(--elementIdColor);
+    }
+
+    .contextClasses {
+        color: var(--elementClassesColor);
+    }
+
+    .contextActions {
+        display: none;
+        position: absolute;
+        box-sizing: border-box;
+        right: 0px;
+        top: 0px;
+        height: 100%;
+        padding: 0em 1em;
+        align-items: center;
+        background-color: var(--contextHoverBg);
+    }
+    
+    &:hover .contextActions {
+        display: flex;
+    }
+    
+    .contextActions i {
+        padding: 5px;
+        cursor: pointer;
+    }
+    
+    .contextActions i > svg {
+        fill: var(--icon);
+    }
+    
+    .contextActions i:hover > svg {
+        fill: var(--iconHover);
+    }
+}

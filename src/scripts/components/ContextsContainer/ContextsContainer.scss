@@ -1,0 +1,10 @@
+.contextsContainer {
+    padding: 3px 5px;
+    cursor: default;
+    flex-grow: 1;
+    overflow: hidden;
+    font-family: 'consolas', 'lucida console', 'courier new', monospace;
+    font-style: italic;
+    font-weight: bold;
+    color: var(--bodyColor);
+}

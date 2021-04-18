@@ -1,0 +1,12 @@
+.contextListItem {
+    display: flex;
+    align-items: center;
+
+    .contextPosition {
+        padding: 2px 5px;
+        margin: 5px;
+        background-color: var(--tagBg);
+        color: var(--bodyColor);
+        border-radius: 5px;
+    }
+}

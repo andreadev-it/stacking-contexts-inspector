@@ -1,0 +1,62 @@
+
+
+.treeItem {
+    position: relative;
+    cursor: pointer;
+    
+    &:hover {
+        background-color: var(--contextHoverBg);
+    }
+
+    &[data-selected] {
+        background-color: var(--contextSelectedBg);
+        
+        .treeItemContext {
+            background-color: var(--contextSelectedBg) !important;
+        }
+    }
+
+    .treeItemContext {
+        cursor: pointer;
+    }
+
+    .contextToggle {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%) translateX(-18px);
+        padding: 5px;
+    }
+    
+    .contextToggleIcon {
+        display: inline-block;
+        position: relative;
+    }
+    
+    /* Here I'm using the icon color, because these styles are related to the little triangle on the side of a context in the tree */
+    &[data-status=closed] .contextToggle .contextToggleIcon {
+        border-left: solid 4px var(--icon);
+        border-top: solid 4px transparent;
+        border-bottom: solid 4px transparent;
+    }
+    
+    &[data-status=open] .contextToggle .contextToggleIcon {
+        border-top: solid 4px var(--icon);
+        border-left: solid 4px transparent;
+        border-right: solid 4px transparent;
+        top: -2px;
+    }
+    
+    /*
+        Horrible, but I couldn't find any other way to do it.
+        It will show the context actions (the little icons on the right) when the tree item is hovered
+    */
+    &:hover .treeItemContext > div:nth-child(2) {
+        background-color: var(--contextHoverBg);
+        display: flex;
+    }
+    
+    &[data-selected] .treeItemContext > div:nth-child(2) {
+        background-color: var(--contextSelectedBg);
+        display: flex;
+    }
+}   

@@ -1,0 +1,19 @@
+.optionBar {
+    display: flex;
+    align-items: stretch;
+    height: 27px;
+    background-color: var(--optionBarBackground);
+    border-top: solid 1px var(--borderColor);
+    border-bottom: solid 1px var(--borderColor);
+    color: var(--bodyColor);
+    
+    &:first-child {
+        border-top: solid 0px;
+    }
+
+    .optionBarTitle {
+        display: flex;
+        align-items: center;
+        padding: 0px 1em;
+    }
+}
