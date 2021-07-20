@@ -113,6 +113,21 @@ async function getPageFramesSources(tabId) {
 }
 
 /**
+ * Send a message to the extension panels to warn that the contexts should be refreshed.
+ */
+async function sendDOMChangedWarning(tabId) {
+    let panelConnection = await getScriptConnection("panel", tabId);
+    let sidebarConnection = await getScriptConnection("sidebar", tabId);
+
+    if (panelConnection) {
+        await panelConnection.setShouldUpdate(true);
+    }
+    if (sidebarConnection) {
+        await sidebarConnection.setShouldUpdate(true);
+    }
+}
+
+/**
  * Handle the background handler errors (right now it just prints them to the console)
  */
 function onHandlerError(details) {
@@ -127,7 +142,8 @@ let bgHandler = new BackgroundHandler({
     scrollToContext,
     detectLastInspectedElement,
     getInspectedElementDetails,
-    getPageFramesSources
+    getPageFramesSources,
+    sendDOMChangedWarning
 }, {
     errorCallback: onHandlerError
 });

@@ -4,7 +4,6 @@ import SVG from '../SVG';
 import styles from "./OptionBarButton.scss";
 
 const OptionBarButton = ({ text, icon, ...props }) => {
-    console.log("Styles: ", styles);
     return (
         <div className={ `${styles.optionBarButton} ${(icon) ? styles.iconBtn : ""}` } {...props}>
             {

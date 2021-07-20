@@ -21,7 +21,7 @@
     "sass": "^1.32.8"
   },
   "dependencies": {
-    "@andreadev/bg-script": "^1.1.6",
+    "@andreadev/bg-script": "^1.1.7",
     "@parcel/transformer-raw": "^2.0.0-beta.1",
     "preact": "^10.5.12"
   },

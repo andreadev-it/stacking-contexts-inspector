@@ -21,7 +21,7 @@ const SidebarContent = () => {
     let [curNode, setCurNode] = useState(null);
     let [contextsLoaded, setContextsLoaded] = useState(false);
 
-    let { getConnection } = useContext(ConnectionContext);
+    let { getConnection, shouldUpdate } = useContext(ConnectionContext);
     let {contexts, refreshContexts} = useContext(DataContext);
 
     let context = contexts[curNode?.contextId] ?? null;
@@ -80,6 +80,7 @@ const SidebarContent = () => {
 
     return (
         <>
+            { shouldUpdate && "You should really update your contexts!" }
             <Section title="Node details" buttons={NodeDetailsMenu}>
                 {
                     !curNode && (

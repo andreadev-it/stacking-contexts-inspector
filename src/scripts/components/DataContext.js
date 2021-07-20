@@ -7,7 +7,7 @@ export const DataContext = createContext();
 
 const DataContextProvider = ({ children }) => {
 
-    const { getConnection } = useContext(ConnectionContext);
+    const { getConnection, setShouldUpdate } = useContext(ConnectionContext);
 
     const [contexts, setContextsRaw] = useState([]);
 
@@ -20,11 +20,13 @@ const DataContextProvider = ({ children }) => {
 
     const refreshContexts = async () => {
         let connection = await getConnection();
+
         // TEMP
         let tabId = chrome.devtools.inspectedWindow.tabId;
         let pageContexts = await connection.analysePage(tabId);
 
         setContexts(pageContexts);
+        setShouldUpdate(false);
     }
 
     const cleanContexts = () => {
