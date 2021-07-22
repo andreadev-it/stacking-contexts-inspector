@@ -4,6 +4,7 @@ import { DataContext } from '../DataContext';
 import { ConnectionContext } from '../ConnectionContext';
 import Section from '../Section/Section';
 import OptionBarButton from '../OptionBarButton/OptionBarButton';
+import OptionBarIcon from '../OptionBarIcon/OptionBarIcon';
 import Context from '../Context/Context';
 import OrderedContextsList from '../OrderedContextsList/OrderedContextsList';
 import NodeDetails from '../NodeDetails/NodeDetails';
@@ -11,7 +12,9 @@ import ContextDetails from '../ContextDetails/ContextDetails';
 import Spinner from '../Spinner/Spinner';
 
 import RefreshIcon from '../../../icons/refresh.svg';
+import WarningIcon from '../../../icons/warning.svg';
 import ContextsContainer from '../ContextsContainer/ContextsContainer';
+import SVG from '../SVG';
 
 const SmallSpinner = () => (
     <Spinner position={'relative'} width={50} height={50} />
@@ -75,12 +78,12 @@ const SidebarContent = () => {
     let NodeDetailsMenu = (
         <>
             <OptionBarButton icon={RefreshIcon} title="Refresh stacking contexts" onClick={() => refreshContextsCache()} />
+            { shouldUpdate && <OptionBarIcon icon={WarningIcon} title="Stacking contexts need to be refreshed" /> } 
         </>
     )
 
     return (
         <>
-            { shouldUpdate && "You should really update your contexts!" }
             <Section title="Node details" buttons={NodeDetailsMenu}>
                 {
                     !curNode && (
@@ -94,6 +97,18 @@ const SidebarContent = () => {
                 }
             </Section>
             <Section title="Context details">
+                {
+                    shouldUpdate && (
+                        <>
+                            <div>
+                                <SVG src={WarningIcon} className="inline-icon" />
+                                <span style={{marginLeft: '4px', color: 'hsl(57deg 100% 36%)'}}>There were some changes in the page.</span>
+                            </div>
+                            <br />
+                            <button class="btn" onClick={() => refreshContextsCache()}>Refresh contexts</button>
+                        </>
+                    )
+                }
                 {
                     contextsLoaded && curNode?.createsContext && context && (
                         <ContextDetails context={context} />

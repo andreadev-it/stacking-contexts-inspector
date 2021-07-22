@@ -13,6 +13,11 @@
     --elementClassesColor: rgb(0, 136, 0);
     --elementInertColor: #333;
     --tagBg: #ddd;
+    --btnBg: #fff;
+    --btnColor: #333;
+    --btnBorderColor: #ccc;
+    --btnHoverBg: #eee;
+    --btnHoverColor: #000;
 }
  
 #root.theme-dark {
@@ -33,6 +38,11 @@
     --scrollbarCornerBg: #242424;
     --scrollbarThumbBg: #333;
     --scrollbarTrackBg: rgb(36,36,36);
+    --btnBg: hsl(225, 6%, 13%);
+    --btnColor: #aaa;
+    --btnBorderColor: #3d3d3d;
+    --btnHoverBg: rgb(34, 42, 54);
+    --btnHoverColor: #fff;
 }
 
 #root {

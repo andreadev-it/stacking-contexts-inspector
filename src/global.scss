@@ -15,5 +15,20 @@ body {
 :global(.inline-icon) svg {
     width: 15px;
     height: 15px;
-    vertical-align: bottom;
+    vertical-align: text-bottom;
+}
+
+:global(.btn) {
+    font-size: 12px;
+    background-color: var(--btnBg);
+    color: var(--btnColor);
+    padding: 4px 9px;
+    border: solid 1px var(--btnBorderColor);
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+:global(.btn):hover {
+    background-color: var(--btnHoverBg);
+    color: var(--btnHoverColor);
 }

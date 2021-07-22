@@ -6,6 +6,8 @@ var allContexts = null;
 var rootContext = null;
 var highlightDOM = initHighlightDOM();
 var lastInspectedElement = null;
+var observer = null;
+var isObserverActive = false;
 
 
 /**
@@ -177,16 +179,17 @@ function getPageFramesSources() {
 /**
  * Attach a mutation observer to the DOM and notify the extension that the contexts should be refreshed
  */
-function observeDOMChanges() {
-    // Observer all the changes of the DOM elements position and attribute for the body tag and its children
-    const targetNode = document.body;
-    const config = { attributes: true, childList: true, subtree: true };
-
+function setupDOMObserver() {
     // This is used to debounce the "DOM Changed" notification
     let lastCalled = new Date().getTime();
 
     // Callback for the observer
     const callback = (mutationsList, observer) => {
+        // Check if it has passed enough time from the last call
+        let now = new Date().getTime();
+        let debounceTime = 1000; // one second
+        
+        if (now - lastCalled < debounceTime) return;
 
         // If we're not interested in these mutation, stop the function
         if (!mutationsList.some(isImportantMutation)) return;
@@ -194,24 +197,56 @@ function observeDOMChanges() {
         // If all the mutations are internal, stop the function
         if (mutationsList.every(isInternalMutation)) return;
 
-        // Check if it has passed enough time from the last call
-        let now = new Date().getTime();
-        let debounceTime = 1000; // one second
-        
-        if (now - lastCalled < debounceTime) return;
-
         lastCalled = now;
         sendDOMChangedWarning();
     }
 
-    const observer = new MutationObserver(callback);
-    observer.observe(targetNode, config);
+    observer = new MutationObserver(callback);
 
-    // Disconnect the observer when the user is leaving the page
-    window.addEventListener("beforeunload", () => {
-        observer.disconnect();
-    });
 }
+
+/**
+ * Just a utility function to allow adding and removing it as an event listener
+ */
+function disconnectObserver() {
+    if (!isObserverActive) {
+        console.warn("Tried stopping the observer, but it was already stopped.");
+        return;
+    }
+    observer.disconnect();
+    isObserverActive = false;
+}
+
+/**
+ * Start observing the changes in the DOM
+ */
+function startDOMObserver() {
+
+    if (isObserverActive) {
+        console.warn("Tried starting the observer, but it was already running.");
+        return;
+    }
+
+    // Observer all the changes of the DOM elements position and attribute for the body tag and its children
+    const targetNode = document.body;
+    const config = { attributes: true, childList: true, subtree: true };
+    
+    observer.observe(targetNode, config);
+    isObserverActive = true;
+    
+    // Disconnect the observer when the user is leaving the page
+    window.addEventListener("beforeunload", disconnectObserver);
+}
+
+
+/**
+ * Stop observing the changes in the DOM
+ */
+function stopDOMObserver() {
+    disconnectObserver();
+    window.removeEventListener("beforeunload", disconnectObserver);
+} 
+
 
 /**
  * Check whether or not we're interested in this mutation and want to send a warning in the extension panel and sidebar
@@ -254,7 +289,7 @@ function isInternalMutation(mutation) {
         if (mutation.addedNodes.length == 1) element = mutation.addedNodes[0];
         else if (mutation.removedNodes.length == 1) element = mutation.removedNodes[0];
 
-        if (element.id == "devtools-stacking-context-highlight") {
+        if (element?.id == "devtools-stacking-context-highlight") {
             return true;
         }
     }
@@ -276,11 +311,11 @@ async function sendDOMChangedWarning() {
     await connection.sendDOMChangedWarning(tabId);
 }
 
-// Start observing the DOM changes
-observeDOMChanges();
+
+// Setup the DOM Observer
+setupDOMObserver();
 
 // Create the connection to the background script exposing the methods.
-
 let scriptId = "content";
 if (window.top !== window.self) {
     scriptId += "." + window.location.href;
@@ -294,5 +329,7 @@ var bgScript = new BackgroundScript(scriptId, {
     scrollToContext,
     detectLastInspectedElement,
     getInspectedElementDetails,
-    getPageFramesSources
+    getPageFramesSources,
+    startDOMObserver,
+    stopDOMObserver
 });
