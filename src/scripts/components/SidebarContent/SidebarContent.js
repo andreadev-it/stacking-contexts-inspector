@@ -4,7 +4,7 @@ import { DataContext } from '../DataContext';
 import { ConnectionContext } from '../ConnectionContext';
 import Section from '../Section/Section';
 import OptionBarButton from '../OptionBarButton/OptionBarButton';
-import OptionBarIcon from '../OptionBarIcon/OptionBarIcon';
+import OptionBarLabel from '../OptionBarLabel/OptionBarLabel';
 import Context from '../Context/Context';
 import OrderedContextsList from '../OrderedContextsList/OrderedContextsList';
 import NodeDetails from '../NodeDetails/NodeDetails';
@@ -78,7 +78,7 @@ const SidebarContent = () => {
     let NodeDetailsMenu = (
         <>
             <OptionBarButton icon={RefreshIcon} title="Refresh stacking contexts" onClick={() => refreshContextsCache()} />
-            { shouldUpdate && <OptionBarIcon icon={WarningIcon} title="Stacking contexts need to be refreshed" /> } 
+            { shouldUpdate && <OptionBarLabel icon={WarningIcon} title="Stacking contexts need to be refreshed" /> } 
         </>
     )
 

@@ -1,4 +1,7 @@
 import { BackgroundHandler } from '@andreadev/bg-script';
+import TabStatus from './classes/TabStatus';
+
+let tabs = new Map();
 
 /**
  * Inject the content script into a tab
@@ -25,9 +28,12 @@ function injectScript(tabId) {
  * @param {boolean} analysePage Only when the scriptId is 'content', it forces a page analysis before returning the connection.
  * @returns {Promise<Connection>} The connection to the content script
  */
-async function getScriptConnection(scriptId, tabId, analysePage=false) {
+async function getScriptConnection(scriptId, tabId, injectOnFail=true) {
 
     if (!bgHandler.hasConnectedScript(scriptId, tabId)) {
+        // Not returning anything if there is no script attached and we don't want to automatically inject the content script
+        if (!injectOnFail) return undefined;
+        
         await injectScript(tabId);
     }
 
@@ -113,17 +119,81 @@ async function getPageFramesSources(tabId) {
 }
 
 /**
+ * Start the DOM Observer
+ * 
+ * @param {number} tabId 
+ */
+async function startDOMObserver(tabId) {
+    let connection = await getScriptConnection("content", tabId);
+    console.log("Starting DOM Observer...")
+    await connection.startDOMObserver();
+}
+
+/**
+ * Stop the DOM Observer
+ * 
+ * @param {number} tabId 
+ */
+ async function stopDOMObserver(tabId) {
+    let connection = await getScriptConnection("content", tabId);
+    console.log("Stopping DOM Observer...")
+    await connection.stopDOMObserver();
+}
+
+/**
  * Send a message to the extension panels to warn that the contexts should be refreshed.
  */
 async function sendDOMChangedWarning(tabId) {
-    let panelConnection = await getScriptConnection("panel", tabId);
-    let sidebarConnection = await getScriptConnection("sidebar", tabId);
+    let panelConnection = await getScriptConnection("panel", tabId, false);
+    let sidebarConnection = await getScriptConnection("sidebar", tabId, false);
 
     if (panelConnection) {
         await panelConnection.setShouldUpdate(true);
     }
     if (sidebarConnection) {
         await sidebarConnection.setShouldUpdate(true);
+    }
+}
+
+/**
+ * Update the devtools pages visibility status in order to decide whether to start or stop the DOM observer
+ * 
+ * @param {number} tabId The tab id
+ * @param {string} scriptId The script id
+ * @param {boolean} visibilityStatus The current visibility status of the page where the specified script id is used
+ */
+function updateDevtoolsPageStatus(tabId, scriptId, isActive) {
+    console.log(`The script '${scriptId}' related to the tab '${tabId}' is currently ${isActive ? 'active' : 'hidden'}`)
+
+    let tabStatus = tabs.get(tabId);
+    if (tabStatus == undefined) {
+        tabStatus = new TabStatus();
+        tabs.set(tabId, tabStatus);
+    }
+
+    let isInspected = tabStatus.isBeingInspected;
+
+    switch (scriptId) {
+        case "panel":
+            tabStatus.isPanelActive = isActive;
+            break
+        case "sidebar":
+            tabStatus.isSidebarActive = isActive;
+            break;
+        default:
+            return;
+    }
+
+    let isCurrentlyInspected = tabStatus.isBeingInspected;
+    
+    // If the overall page inspected status has changed, decide whether to start or stop the DOM Observer
+    if (isInspected == isCurrentlyInspected) return;
+
+    if (isCurrentlyInspected) {
+        startDOMObserver(tabId);
+    }
+    else {
+        stopDOMObserver(tabId);
     }
 }
 
@@ -143,9 +213,36 @@ let bgHandler = new BackgroundHandler({
     detectLastInspectedElement,
     getInspectedElementDetails,
     getPageFramesSources,
-    sendDOMChangedWarning
+    sendDOMChangedWarning,
+    updateDevtoolsPageStatus
 }, {
     errorCallback: onHandlerError
 });
 
-window.bgHandler = bgHandler;
+bgHandler.addListener("connectionreceived", ({scriptId, tabId}) => {
+    // Devtools script are tab-agnostic by default, so I'm appending the tab id to it using `scriptid-tabid` format
+    if (tabId == null) {
+        // Find the tab id delimiter
+        let delimiter = scriptId.search("-");
+        // Get the tab id
+        tabId = parseInt(scriptId.substring(delimiter + 1));
+        // Get the clean script id
+        scriptId = scriptId.substring(0, delimiter);
+        // Notify the change
+        updateDevtoolsPageStatus(tabId, scriptId, true);
+    }
+});
+
+bgHandler.addListener("connectionended", ({scriptId, tabId}) => {
+    // Devtools script are tab-agnostic by default, so I'm appending the tab id to it using `scriptid-tabid` format
+    if (tabId == null) {
+        // Find the tab id delimiter
+        let delimiter = scriptId.search("-");
+        // Get the tab id
+        tabId = parseInt(scriptId.substring(delimiter + 1));
+        // Get the clean script id
+        scriptId = scriptId.substring(0, delimiter);
+        // Notify the change
+        updateDevtoolsPageStatus(tabId, scriptId, false);
+    }
+});
