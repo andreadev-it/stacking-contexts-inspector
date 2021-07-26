@@ -4,25 +4,27 @@
   "description": "Help inspecting the css stacking contexts and solving the z-index war.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build-dev": "parcel build src/**/*.html src/scripts/content.js --no-minify",
+    "build-dev": "parcel build src/**/*.html src/scripts/content.js --no-optimize",
     "build": "parcel build src/**/*.html src/scripts/content.js"
   },
   "author": "Andrea Dragotta <dev@andreadev.it>",
   "license": "ISC",
   "devDependencies": {
-    "@babel/core": "^7.13.8",
-    "@parcel/config-default": "^2.0.0-beta.1",
-    "@parcel/transformer-js": "^2.0.0-beta.1",
-    "@parcel/transformer-svg-react": "^2.0.0-nightly.1739",
-    "@svgr/parcel-plugin-svgr": "^5.5.0",
-    "parcel": "^2.0.0-beta.1",
-    "parcel-reporter-static-files-copy": "^1.2.1",
+    "@parcel/transformer-sass": "^2.0.0-beta.3.1",
+    "autoprefixer": "^10.3.1",
+    "parcel": "^2.0.0-beta.3.1",
+    "postcss": "^8.3.6",
     "postcss-modules": "^3.2.2",
     "sass": "^1.32.8"
   },
   "dependencies": {
-    "@andreadev/bg-script": "^1.1.7",
-    "@parcel/transformer-raw": "^2.0.0-beta.1",
+    "@andreadev/bg-script": "^1.1.10",
+    "@parcel/config-default": "^2.0.0-beta.3.1",
+    "@parcel/transformer-js": "^2.0.0-beta.3.1",
+    "@parcel/transformer-raw": "^2.0.0-beta.3.1",
+    "@parcel/transformer-svg-react": "^2.0.0-beta.3.1",
+    "@svgr/parcel-plugin-svgr": "^5.5.0",
+    "parcel-reporter-static-files-copy": "^1.3.0",
     "preact": "^10.5.12"
   },
   "browserslist": [

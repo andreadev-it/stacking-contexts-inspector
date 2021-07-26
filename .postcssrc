@@ -1,4 +1,6 @@
 {
     "modules": true,
-    "plugins": {}
+    "plugins": {
+        "autoprefixer": {}
+    }
 }
