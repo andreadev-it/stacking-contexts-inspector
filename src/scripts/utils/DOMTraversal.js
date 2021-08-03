@@ -52,6 +52,18 @@ function traverse(element, parentContext, isInIframe=false, frame) {
             element
         );
     }
+    // Check if the element contains an open shadow DOM
+    else if ( hasTraversableShadowDOM(element) ) {
+        let shadowRoot = element.shadowRoot;
+
+        // Shadow roots can't be a container because they are not taken into consideration for stacking contexts
+
+        for (let child of shadowRoot.children) {
+            if (element.nodeType == Node.ELEMENT_NODE) {
+                traverse(child, parentContext, true, frame);
+            }
+        }
+    }
 }
 
 /**
@@ -64,6 +76,16 @@ function isTraversableIframe(element) {
     return element.children.length == 0 &&
         element.tagName === "IFRAME" &&
         element.contentDocument?.documentElement;
+}
+
+/**
+ * Check whether or not this element has an open shadow DOM
+ * 
+ * @param {Node} element The element to be checked
+ * @returns {boolean}
+ */
+function hasTraversableShadowDOM(element) {
+    return element.shadowRoot?.mode == "open";
 }
 
 /**
