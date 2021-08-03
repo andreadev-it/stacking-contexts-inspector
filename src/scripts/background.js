@@ -1,7 +1,61 @@
 import { BackgroundHandler } from '@andreadev/bg-script';
 import TabStatus from './classes/TabStatus';
 
+// Contain all the tabs status (see TabStatus class for more details)
 let tabs = new Map();
+
+let DEFAULT_SETTINGS = {
+    "dom-changed-warning": true,
+    "contexts-click-to-expand": false
+};
+
+let settings = null;
+
+
+/**
+ * Initialize the settings inside local storage to their default values
+ */
+function initExtensionSettings() {
+    chrome.storage.local.set({ "settings": DEFAULT_SETTINGS });
+}
+
+/**
+ * Load the extension settings
+ * 
+ * @returns {Promise<Object>}
+ */
+function loadExtensionSettings() {
+    return new Promise( (resolve, reject) => {
+        try {
+            chrome.storage.local.get(["settings"], (result) => {
+                settings = result.settings;
+                resolve(settings);
+            });
+        }
+        catch (e) {
+            reject(e);
+        }
+    });
+}
+
+/**
+ * Save the new settings in the local chrome extension storage
+ * 
+ * @param {Object} newSettings The updated settings
+ * @returns {Promise}
+ */
+function saveExtensionSettings(newSettings) {
+    return new Promise( (resolve, reject) => {
+        try {
+            chrome.storage.local.set({ settings: newSettings }, () => {
+                resolve();
+            });
+        }
+        catch (e) {
+            reject(e);
+        }
+    });
+}
 
 /**
  * Inject the content script into a tab
@@ -214,35 +268,57 @@ let bgHandler = new BackgroundHandler({
     getInspectedElementDetails,
     getPageFramesSources,
     sendDOMChangedWarning,
-    updateDevtoolsPageStatus
+    updateDevtoolsPageStatus,
+    loadExtensionSettings,
+    saveExtensionSettings
 }, {
     errorCallback: onHandlerError
 });
 
-bgHandler.addListener("connectionreceived", ({scriptId, tabId}) => {
-    // Devtools script are tab-agnostic by default, so I'm appending the tab id to it using `scriptid-tabid` format
-    if (tabId == null) {
-        // Find the tab id delimiter
-        let delimiter = scriptId.search("-");
-        // Get the tab id
-        tabId = parseInt(scriptId.substring(delimiter + 1));
-        // Get the clean script id
-        scriptId = scriptId.substring(0, delimiter);
-        // Notify the change
-        updateDevtoolsPageStatus(tabId, scriptId, true);
-    }
-});
+/**
+ * Initialization method
+ */
+function init() {
+    // Add "connection received" handler to update tab status
+    bgHandler.addListener("connectionreceived", ({scriptId, tabId}) => {
+        // Devtools script are tab-agnostic by default, so I'm appending the tab id to it using `scriptid-tabid` format
+        if (tabId == null) {
+            // Find the tab id delimiter
+            let delimiter = scriptId.search("-");
+            // Get the tab id
+            tabId = parseInt(scriptId.substring(delimiter + 1));
+            // Get the clean script id
+            scriptId = scriptId.substring(0, delimiter);
+            // Notify the change
+            updateDevtoolsPageStatus(tabId, scriptId, true);
+        }
+    });
 
-bgHandler.addListener("connectionended", ({scriptId, tabId}) => {
-    // Devtools script are tab-agnostic by default, so I'm appending the tab id to it using `scriptid-tabid` format
-    if (tabId == null) {
-        // Find the tab id delimiter
-        let delimiter = scriptId.search("-");
-        // Get the tab id
-        tabId = parseInt(scriptId.substring(delimiter + 1));
-        // Get the clean script id
-        scriptId = scriptId.substring(0, delimiter);
-        // Notify the change
-        updateDevtoolsPageStatus(tabId, scriptId, false);
-    }
-});
+    // Add "connection ended" handler to update tab status
+    bgHandler.addListener("connectionended", ({scriptId, tabId}) => {
+        // Devtools script are tab-agnostic by default, so I'm appending the tab id to it using `scriptid-tabid` format
+        if (tabId == null) {
+            // Find the tab id delimiter
+            let delimiter = scriptId.search("-");
+            // Get the tab id
+            tabId = parseInt(scriptId.substring(delimiter + 1));
+            // Get the clean script id
+            scriptId = scriptId.substring(0, delimiter);
+            // Notify the change
+            updateDevtoolsPageStatus(tabId, scriptId, false);
+        }
+    });
+
+    // Initialize Settings
+    loadExtensionSettings()
+        .then((settings) => {
+            if (!settings) {
+                initExtensionSettings();
+            }
+        })
+        .catch(() => {
+            initExtensionSettings();
+        });
+}
+
+init();

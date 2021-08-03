@@ -1,6 +1,7 @@
 import { h, Fragment } from 'preact';
 import { useContext } from 'preact/hooks';
 import { ConnectionContext } from '../ConnectionContext';
+import { SettingsContext } from '../SettingsContext';
 import Section from '../Section/Section';
 import OrderedContextsList from '../OrderedContextsList/OrderedContextsList';
 import SVG from '../SVG';
@@ -10,14 +11,14 @@ import WarningIcon from '../../../icons/warning.svg';
 
 const Sidepane = ({context, ...props}) => {
     
-    let { shouldUpdate } = useContext(ConnectionContext)
-
+    let { shouldUpdate } = useContext(ConnectionContext);
+    let { settings } = useContext(SettingsContext);
 
     return (
         <div className={styles.sidepane} {...props}>
             <Section title="Info about the context" id="context-info">
                 {
-                    shouldUpdate && (
+                    shouldUpdate && settings["dom-changed-warning"] && (
                         <>
                             <div>
                                 <SVG src={WarningIcon} className="inline-icon" />

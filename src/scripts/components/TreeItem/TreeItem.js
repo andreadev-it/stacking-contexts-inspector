@@ -27,6 +27,11 @@ const TreeItem = ({context, depth, isVisible, onToggle, ...props}) => {
         return isValuableContainer(context);
     }
 
+    let handleToggle = (event) => {
+        event.stopPropagation();
+        onToggle(context)
+    }
+
     return (
         <div
             className={styles.treeItem}
@@ -40,7 +45,7 @@ const TreeItem = ({context, depth, isVisible, onToggle, ...props}) => {
         >
             {
                 shouldShowToggle() && (
-                    <div className={styles.contextToggle} onClick={() => onToggle(context)}>
+                    <div className={styles.contextToggle} onClick={handleToggle}>
                         <span className={styles.contextToggleIcon}></span>
                     </div>
                 )

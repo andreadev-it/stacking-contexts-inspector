@@ -2,8 +2,9 @@
     display: grid;
     grid-template-areas:
         "menu    menu"
+        "settings settings"
         "content sidepane";
-    grid-template-rows: auto 1fr;
+    grid-template-rows: auto auto 1fr;
     grid-template-columns: 1fr auto;
     height: 100vh;
 }
@@ -21,4 +22,12 @@
 #panelSidepane {
     grid-area: sidepane;
     overflow: auto;
+}
+
+#panelSettings {
+    grid-area: settings;
+}
+
+#panelSettings.hidden {
+    display: none;
 }

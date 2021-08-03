@@ -4,6 +4,7 @@ import ConnectionContextProvider from '../../scripts/components/ConnectionContex
 import PanelContent from '../../scripts/components/PanelContent/PanelContent';
 
 import '../../global.scss';
+import SettingsContextProvider from '../../scripts/components/SettingsContext';
 
 const App = () => {
 
@@ -11,9 +12,11 @@ const App = () => {
 
     return (
         <ConnectionContextProvider scriptId="panel" context="devtools">
-            <DataContextProvider>
-                <PanelContent />
-            </DataContextProvider>
+            <SettingsContextProvider>
+                <DataContextProvider>
+                    <PanelContent />
+                </DataContextProvider>
+            </SettingsContextProvider>
         </ConnectionContextProvider>
     )
 }

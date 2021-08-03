@@ -2,6 +2,7 @@ import { h, Fragment } from 'preact';
 import { useContext, useEffect, useState } from 'preact/hooks';
 import { DataContext } from '../DataContext';
 import { ConnectionContext } from '../ConnectionContext';
+import { SettingsContext } from '../SettingsContext';
 import Section from '../Section/Section';
 import OptionBarButton from '../OptionBarButton/OptionBarButton';
 import OptionBarLabel from '../OptionBarLabel/OptionBarLabel';
@@ -10,10 +11,10 @@ import OrderedContextsList from '../OrderedContextsList/OrderedContextsList';
 import NodeDetails from '../NodeDetails/NodeDetails';
 import ContextDetails from '../ContextDetails/ContextDetails';
 import Spinner from '../Spinner/Spinner';
+import ContextsContainer from '../ContextsContainer/ContextsContainer';
 
 import RefreshIcon from '../../../icons/refresh.svg';
 import WarningIcon from '../../../icons/warning.svg';
-import ContextsContainer from '../ContextsContainer/ContextsContainer';
 import SVG from '../SVG';
 
 const SmallSpinner = () => (
@@ -25,6 +26,7 @@ const SidebarContent = () => {
     let [contextsLoaded, setContextsLoaded] = useState(false);
 
     let { getConnection, shouldUpdate } = useContext(ConnectionContext);
+    let { settings } = useContext(SettingsContext);
     let {contexts, refreshContexts} = useContext(DataContext);
 
     let context = contexts[curNode?.contextId] ?? null;
@@ -40,7 +42,8 @@ const SidebarContent = () => {
         chrome.devtools.inspectedWindow.eval(
             `(${setInspectedElement.toString()})()`,
             async ( elementIndex , isError) => {
-                if (isError) {
+                // If there is an error or the element is unreachable, set cur node as null
+                if (isError || elementIndex == -1) {
                     setCurNode(null);
                     return;
                 }
@@ -78,7 +81,7 @@ const SidebarContent = () => {
     let NodeDetailsMenu = (
         <>
             <OptionBarButton icon={RefreshIcon} title="Refresh stacking contexts" onClick={() => refreshContextsCache()} />
-            { shouldUpdate && <OptionBarLabel icon={WarningIcon} title="Stacking contexts need to be refreshed" /> } 
+            { shouldUpdate && settings["dom-changed-warning"] && <OptionBarLabel icon={WarningIcon} title="Stacking contexts need to be refreshed" /> } 
         </>
     )
 
@@ -98,7 +101,7 @@ const SidebarContent = () => {
             </Section>
             <Section title="Context details">
                 {
-                    shouldUpdate && (
+                    shouldUpdate && settings["dom-changed-warning"] && (
                         <>
                             <div>
                                 <SVG src={WarningIcon} className="inline-icon" />

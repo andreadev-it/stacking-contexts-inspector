@@ -1,6 +1,7 @@
 import { h, Fragment } from 'preact';
-import { useEffect, useState } from 'preact/hooks';
+import { useEffect, useState, useContext } from 'preact/hooks';
 import { isValuableContainer } from '../../../scripts/utils/utils';
+import { SettingsContext } from '../SettingsContext';
 import TreeItem from '../TreeItem/TreeItem';
 import Spinner from '../../../scripts/components/Spinner/Spinner';
 
@@ -8,8 +9,9 @@ import styles from "./ContextsTree.scss";
 
 const ContextsTree = ({contexts, onSelectContext, ...props}) => {
 
-    [contextsState, setContextsState] = useState([]);
-    [selected, setSelected] = useState(null);
+    let [contextsState, setContextsState] = useState([]);
+    let [selected, setSelected] = useState(null);
+    let { settings } = useContext(SettingsContext);
 
     useEffect( () => {
         let newState = contexts.map( (el, i) => {
@@ -109,7 +111,7 @@ const ContextsTree = ({contexts, onSelectContext, ...props}) => {
                                         () => ( (state.open) ? closeContext(contexts[i], i) : openContext(contexts[i], i) )
                                     }
                                     onClick={
-                                        () => selectContext(contexts[i])
+                                        () => (selectContext(contexts[i]) , (!state.open && settings["contexts-click-to-expand"]) ? openContext(contexts[i], i) : null )
                                     }
                                 />
                             )

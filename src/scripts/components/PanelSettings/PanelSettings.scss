@@ -1,0 +1,21 @@
+.settingsContainer {
+    background-color: var(--optionBarBackground);
+    color: var(--bodyColor);
+    border-bottom: solid 1px var(--borderColor);
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 5px;
+    padding: 5px;
+}
+
+@media screen and (min-width: 400px) {
+    .settingsContainer {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media screen and (min-width: 900px) {
+    .settingsContainer {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
