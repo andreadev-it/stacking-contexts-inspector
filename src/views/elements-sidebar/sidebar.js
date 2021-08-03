@@ -1,6 +1,7 @@
 import { h, render } from 'preact';
 import DataContextProvider from '../../scripts/components/DataContext';
 import ConnectionContextProvider from '../../scripts/components/ConnectionContext';
+import SettingsContextProvider from '../../scripts/components/SettingsContext';
 import SidebarContent from '../../scripts/components/SidebarContent/SidebarContent';
 
 import '../../global.scss';
@@ -11,9 +12,11 @@ const App = () => {
 
     return (
         <ConnectionContextProvider scriptId="sidebar" context="devtools">
-            <DataContextProvider>
-                <SidebarContent />
-            </DataContextProvider>
+            <SettingsContextProvider>
+                <DataContextProvider>
+                    <SidebarContent />
+                </DataContextProvider>
+            </SettingsContextProvider>
         </ConnectionContextProvider>
     )
 }

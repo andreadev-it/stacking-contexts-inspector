@@ -27,9 +27,9 @@ const ConnectionContextProvider = ({ scriptId, context, children }) => {
         // Init the Background Script handler
         bgScript = new BackgroundScript(scriptId, { setShouldUpdate }, { context });
         // Add the visibilitychange event listener and immediatly notify the current status
-        window.addEventListener("visibilitychange", notifyVisibilityChange);
-        // Handle 
-        window.addEventListener("unload", () => { alert("test"); notifyVisibilityChange(false) }); // debug
+        window.addEventListener("visibilitychange", () => notifyVisibilityChange());
+        // Handle disconnection
+        window.addEventListener("unload", () => notifyVisibilityChange(false));
         notifyVisibilityChange();
     }
 
