@@ -39,6 +39,21 @@ function loadExtensionSettings() {
 }
 
 /**
+ * Send a message to the extension panels to warn that the contexts should be refreshed.
+ */
+ async function notifySettingsChanged(tabId) {
+    let panelConnection = await getScriptConnection("panel", tabId, false);
+    let sidebarConnection = await getScriptConnection("sidebar", tabId, false);
+
+    if (panelConnection) {
+        await panelConnection.setShouldUpdateSettings(true);
+    }
+    if (sidebarConnection) {
+        await sidebarConnection.setShouldUpdateSettings(true);
+    }
+}
+
+/**
  * Save the new settings in the local chrome extension storage
  * 
  * @param {Object} newSettings The updated settings
@@ -48,6 +63,7 @@ function saveExtensionSettings(newSettings) {
     return new Promise( (resolve, reject) => {
         try {
             chrome.storage.local.set({ settings: newSettings }, () => {
+
                 resolve();
             });
         }
@@ -117,7 +133,7 @@ async function analysePage(tabId) {
  * @param {number} contextId The id of the context to be highlighted
  */
 async function highlightContext(tabId, contextId) {
-    let connection = await getScriptConnection("content", tabId, true);
+    let connection = await getScriptConnection("content", tabId);
     await connection.highlightContext(contextId);
 }
 
@@ -138,7 +154,7 @@ async function undoHighlightContext(tabId) {
  * @param {number} contextId 
  */
 async function scrollToContext(tabId, contextId) {
-    let connection = await getScriptConnection("content", tabId, true);
+    let connection = await getScriptConnection("content", tabId);
     await connection.scrollToContext(contextId);
 }
 
@@ -149,7 +165,7 @@ async function scrollToContext(tabId, contextId) {
  * @param {number} elementIndex The index of the last inspected element inside the DOM
  */
 async function detectLastInspectedElement(tabId, elementIndex) {
-    let connection = await getScriptConnection("content", tabId, true);
+    let connection = await getScriptConnection("content", tabId);
     await connection.detectLastInspectedElement(elementIndex);
 } 
 
@@ -160,7 +176,7 @@ async function detectLastInspectedElement(tabId, elementIndex) {
  * @returns {Object} The element details
  */
 async function getInspectedElementDetails(tabId) {
-    let connection = await getScriptConnection("content", tabId, true);
+    let connection = await getScriptConnection("content", tabId);
     let elementDetails = await connection.getInspectedElementDetails();
 
     return elementDetails;
@@ -270,7 +286,8 @@ let bgHandler = new BackgroundHandler({
     sendDOMChangedWarning,
     updateDevtoolsPageStatus,
     loadExtensionSettings,
-    saveExtensionSettings
+    saveExtensionSettings,
+    notifySettingsChanged
 }, {
     errorCallback: onHandlerError
 });

@@ -49,7 +49,7 @@ const PanelContent = () => {
                 <OptionBarButton icon={RefreshIcon} title="Re-analyse page" onClick={() => analysePage()} />
                 { shouldUpdate && settings["dom-changed-warning"] && (<OptionBarLabel icon={WarningIcon} text="There were changes in the page" style={{color: '#b8ae00'}} />) }
                 <OptionBarSpacer />
-                <OptionBarButton icon={SettingsIcon} title="Open settings" onClick={() => toggleSettings()} />
+                <OptionBarButton icon={SettingsIcon} title="Open settings" data-status={(settingsOpen) ? 'active' : ''} onClick={() => toggleSettings()} />
             </OptionBar>
             <PanelSettings className={(settingsOpen) ? "" : styles.hidden} id={styles.panelSettings} />
             <ContextsTree id={styles.panelTree} contexts={contexts} onSelectContext={(context) => setSelectedContext(context)} />

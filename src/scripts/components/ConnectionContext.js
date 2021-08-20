@@ -1,5 +1,5 @@
 import { h, createContext } from 'preact';
-import { useState } from 'preact/hooks';
+import { useState, useEffect } from 'preact/hooks';
 import { BackgroundScript } from '@andreadev/bg-script';
 
 export const ConnectionContext = createContext();
@@ -17,15 +17,24 @@ async function notifyVisibilityChange(status) {
 const ConnectionContextProvider = ({ scriptId, context, children }) => {
 
     let [shouldUpdate, rawSetShouldUpdate] = useState(false);
+    let [shouldUpdateSettings, rawSetShouldUpdateSettings] = useState(true);
 
     // I did this because I didn't felt like passing the state update function to the library (I thought it could cause problems)
     const setShouldUpdate = (value) => {
         rawSetShouldUpdate(value);
     }
 
+    const setShouldUpdateSettings = (value) => {
+        rawSetShouldUpdateSettings(value);
+    }
+
+    const getConnection = async () => {
+        return await bgScript.getConnection();
+    }
+
     if (bgScript == null) {
         // Init the Background Script handler
-        bgScript = new BackgroundScript(scriptId, { setShouldUpdate }, { context });
+        bgScript = new BackgroundScript(scriptId, { setShouldUpdate, setShouldUpdateSettings }, { context });
         // Add the visibilitychange event listener and immediatly notify the current status
         window.addEventListener("visibilitychange", () => notifyVisibilityChange());
         // Handle disconnection
@@ -33,12 +42,16 @@ const ConnectionContextProvider = ({ scriptId, context, children }) => {
         notifyVisibilityChange();
     }
 
-    const getConnection = async () => {
-        return await bgScript.getConnection();
+    let providerValue = {
+        getConnection,
+        shouldUpdate,
+        setShouldUpdate,
+        shouldUpdateSettings,
+        setShouldUpdateSettings
     }
 
     return (
-        <ConnectionContext.Provider value={{ getConnection, shouldUpdate, setShouldUpdate }}>
+        <ConnectionContext.Provider value={providerValue}>
             {children}
         </ConnectionContext.Provider>
     );

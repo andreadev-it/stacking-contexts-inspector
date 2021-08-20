@@ -35,4 +35,8 @@
     &:hover .optionBarButtonIcon {
         fill: var(--iconHover);
     }
+
+    &[data-status='active'] .optionBarButtonIcon {
+        fill: var(--iconActive);
+    }
 }

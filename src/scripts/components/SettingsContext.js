@@ -1,12 +1,16 @@
 import { h, createContext  } from 'preact';
-import { useContext, useState } from 'preact/hooks';
+import { useContext, useState, useEffect } from 'preact/hooks';
 import { ConnectionContext } from './ConnectionContext';
 
 export const SettingsContext = createContext();
 
 const SettingsContextProvider = ({ children }) => {
 
-    const { getConnection } = useContext(ConnectionContext);
+    const {
+        getConnection,
+        shouldUpdateSettings,
+        setShouldUpdateSettings
+    } = useContext(ConnectionContext);
 
     const [settings, updateSettings] = useState(null);
 
@@ -14,14 +18,21 @@ const SettingsContextProvider = ({ children }) => {
         let connection = await getConnection();
         let loadedSettings = await connection.loadExtensionSettings();
         updateSettings(loadedSettings);
+        setShouldUpdateSettings(false);
     }
 
     const saveSettings = async function (settings) {
-        console.log("New settings: ", settings);
         let connection = await getConnection();
         await connection.saveExtensionSettings(settings);
-        updateSettings(await connection.loadExtensionSettings()); // debug: is this really needed?
+        await connection.notifySettingsChanged(chrome.devtools.inspectedWindow.tabId);
     }
+
+    // Initialization and auto updating when needed
+    useEffect(() => {
+        if (shouldUpdateSettings)
+            loadSettings();
+    }, [shouldUpdateSettings]);
+    
 
     if (settings == null) {
         loadSettings();

@@ -8,6 +8,15 @@
     padding: 5px;
 }
 
+.setting {
+    label {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: var(--bodyPrimaryColor);
+    }
+}
+
 @media screen and (min-width: 400px) {
     .settingsContainer {
         grid-template-columns: 1fr 1fr;

@@ -11,8 +11,6 @@ const PanelSettings = ({className="", ...props}) => {
     }
 
     let { settings, saveSettings } = useContext(SettingsContext);
-    console.log("SETTINGS: ", settings);
-    console.log(styles);
 
     let checkboxClicked = (event) => {
         let value = event.target.checked;
@@ -25,8 +23,11 @@ const PanelSettings = ({className="", ...props}) => {
         <div className={`${styles.settingsContainer} ${className}`} {...props}>
             {
                 settings && Object.keys(settings).map((settingName) => (
-                    <div class="setting">
-                        <input type="checkbox" name={settingName} checked={settings[settingName]} onChange={checkboxClicked} /> {settingsLabels[settingName]}
+                    <div className={styles.setting}>
+                        <label>
+                            <input type="checkbox" name={settingName} checked={settings[settingName]} onChange={checkboxClicked} />
+                            {settingsLabels[settingName]}
+                        </label>
                     </div>
                 ))
             }
