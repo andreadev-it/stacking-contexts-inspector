@@ -4,7 +4,7 @@ The Stacking Contexts Inspector is a [devtools extension for Google Chrome](http
 This extension will add a **new panel** to the devtools and a **new sidebar** on the elements panel.
 
 ### Known bugs and things to keep in mind
-* This extension work by analysing the page at a specific point in time (when you open the panel or the sidebar). It won't automatically react to changes in the page. However, you can use the reload button on the top of the stacking context panel to re-analyse the page at any time.
+* This extension work by analysing the page at a specific point in time (when you open the panel or the sidebar). It won't automatically react to changes in the inspected page, but it will show you a warning when it detects changes that might be altering the stacking contexts. When you see that warning, you can use a button to refresh the stacking contexts at any time.
 * This extension can't currently analyse third-party iframes within the page (work in progress).
 
 If you find any other issue or have some feature request, feel free to use the [Issues section](https://github.com/andreadev-it/stacking-contexts-inspector/issues) here on github to share them.
