@@ -118,6 +118,17 @@ function getContextIdFromNode(node) {
             return foundContext;
         }
 
+        // Check if I've reached a shadowroot container and work my way around it
+        if (lastParent.parentElement === null) {
+
+            let root = lastParent.getRootNode();
+            
+            if (root instanceof ShadowRoot) {
+                lastParent = root.host;
+                continue;
+            }
+        }
+
         lastParent = lastParent.parentElement;
     }
 
