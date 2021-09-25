@@ -1,6 +1,7 @@
 import DOMTraversal from "./utils/DOMTraversal";
 import StackingContext from './classes/StackingContext';
 import { BackgroundScript } from '@andreadev/bg-script';
+import { getNodeFromPath, getPathFromNode } from "./utils/utils";
 
 var allContexts = null;
 var rootContext = null;
@@ -124,11 +125,29 @@ function getContextIdFromNode(node) {
 }
 
 /**
+ * Returns a path to get the element of a specific context even if it is inside an iframe or shadow DOM
+ * 
+ * @param {Integer} contextId 
+ * @returns {Object[]}
+ */
+function getPathFromContext(contextId) {
+    let context = allContexts.find( (context) => context.id == contextId );
+    return getPathFromNode( context.element );
+}
+
+/**
  * Detect which node was tagged as "last inspected" from the devtools, and initialize the related variable.
  */
-function detectLastInspectedElement(elementIndex) {
+function detectLastInspectedElement(elementPath) {
     
-    let element = document.querySelectorAll('*')[elementIndex];
+    let element = null;
+
+    try {
+        element = getNodeFromPath(elementPath);
+    }
+    catch (e) {
+        element = null;
+    }
     
     if (!element) throw "Cannot find element";
     
@@ -327,6 +346,7 @@ var bgScript = new BackgroundScript(scriptId, {
     highlightContext,
     undoHighlightContext,
     scrollToContext,
+    getPathFromContext,
     detectLastInspectedElement,
     getInspectedElementDetails,
     getPageFramesSources,

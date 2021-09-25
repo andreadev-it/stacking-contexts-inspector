@@ -2,6 +2,7 @@ import { h } from 'preact';
 import { useContext } from 'preact/hooks';
 import SVG from '../SVG';
 import { ConnectionContext } from '../ConnectionContext';
+import { getNodeFromPath } from '../../utils/utils';
 
 import InspectIcon from '../../../icons/inspect.svg';
 import IntoviewIcon from '../../../icons/intoview.svg';
@@ -14,8 +15,17 @@ const Context = ({context, noHighlight=false, delegatedClass="", ...props}) => {
 
     let { getConnection } = useContext(ConnectionContext);
 
-    let inspectNode = () => {
-        chrome.devtools.inspectedWindow.eval(`inspect(document.getElementsByTagName('*')[${index}])`)
+    let inspectNode = async () => {
+        let connection = await getConnection();
+        let path = await connection.getPathFromContext(tabId, context.id);
+        let command = `
+            inspect(
+                (
+                    ${getNodeFromPath.toString()}
+                )(${ JSON.stringify(path) })
+            )
+        `;
+        chrome.devtools.inspectedWindow.eval(command);
     }
 
     let scrollToNode = async () => {
@@ -55,11 +65,7 @@ const Context = ({context, noHighlight=false, delegatedClass="", ...props}) => {
                 }
             </div>
             <div className={styles.contextActions}>
-                {
-                    !context.isInIframe && (
-                        <SVG src={InspectIcon} className="inline-icon" title="Inspect element" onClick={ () => inspectNode() } />
-                    )
-                }
+                <SVG src={InspectIcon} className="inline-icon" title="Inspect element" onClick={ () => inspectNode() } />
                 <SVG src={IntoviewIcon} className="inline-icon" title="Scroll into view" onClick={ () => scrollToNode() } />
             </div>
         </div>

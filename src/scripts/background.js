@@ -158,6 +158,11 @@ async function scrollToContext(tabId, contextId) {
     await connection.scrollToContext(contextId);
 }
 
+async function getPathFromContext(tabId, contextId) {
+    let connection = await getScriptConnection("content", tabId);
+    return await connection.getPathFromContext(contextId);
+}
+
 /**
  * Instruct the content script related to a specific tab to get the details about the last inspected element.
  * 
@@ -280,6 +285,7 @@ let bgHandler = new BackgroundHandler({
     highlightContext,
     undoHighlightContext,
     scrollToContext,
+    getPathFromContext,
     detectLastInspectedElement,
     getInspectedElementDetails,
     getPageFramesSources,

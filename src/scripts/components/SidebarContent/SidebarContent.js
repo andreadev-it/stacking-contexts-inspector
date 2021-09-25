@@ -3,6 +3,7 @@ import { useContext, useEffect, useState } from 'preact/hooks';
 import { DataContext } from '../DataContext';
 import { ConnectionContext } from '../ConnectionContext';
 import { SettingsContext } from '../SettingsContext';
+import { getPathFromNode } from '../../utils/utils';
 import Section from '../Section/Section';
 import OptionBarButton from '../OptionBarButton/OptionBarButton';
 import OptionBarLabel from '../OptionBarLabel/OptionBarLabel';
@@ -34,16 +35,11 @@ const SidebarContent = () => {
 
     const handleInspectedElement = () => {
 
-        // It will return the last inspected element position in the DOM from the page.
-        function setInspectedElement() {
-            return Array.from(document.querySelectorAll('*')).findIndex((el) => el === $0);
-        }
-
         chrome.devtools.inspectedWindow.eval(
-            `(${setInspectedElement.toString()})()`,
-            async ( elementIndex , isError) => {
+            `(${getPathFromNode.toString()})($0)`,
+            async ( elementPath , isError) => {
                 // If there is an error or the element is unreachable, set cur node as null
-                if (isError || elementIndex == -1) {
+                if (isError || elementPath === null) {
                     setCurNode(null);
                     return;
                 }
@@ -51,7 +47,7 @@ const SidebarContent = () => {
                 let tabId = chrome.devtools.inspectedWindow.tabId;
                 
                 let connection = await getConnection();
-                await connection.detectLastInspectedElement(tabId, elementIndex);
+                await connection.detectLastInspectedElement(tabId, elementPath);
                 
                 elementDetails = await connection.getInspectedElementDetails(tabId);
                 setCurNode(elementDetails);
