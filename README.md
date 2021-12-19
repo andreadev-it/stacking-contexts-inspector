@@ -25,7 +25,7 @@ When you hover over a context, or have a specific context selected (everywhere w
 If you click on a context, it will be selected and some in-depth information will be shown on the sidepane.
 
 ### The panel sidepane
-The sidepane shows informations related to the stacking context that is currently selected in the tree view. It is divided into two sections: **Info about the context** and **Children z-index order**.
+The sidepane shows information related to the stacking context that is currently selected in the tree view. It is divided into two sections: **Info about the context** and **Children z-index order**.
 
 In the first section, you can see why this DOM element is creating a new stacking context. There might be multiple reasons for this, and all of them will be shown as an unordered list in this section.
 
@@ -44,7 +44,7 @@ The sidebar is divided into multiple sections:
 This section will give you an immediate feedback on whether or not the z-index property is working on the DOM element. If the element selected has no z-index and doesn't create a stacking context, a coherent message will appear.
 
 ### Context details
-This section will show an unordered list that explains why the current element is creating a new stacking context. If you don't want it to be creating a context, you can use these informations to know where to tweak your CSS.
+This section will show an unordered list that explains why the current element is creating a new stacking context. If you don't want it to be creating a context, you can use this information to know where to tweak your CSS.
 
 ### Parent context
 This is very self-explanatory: it just shows which element is the parent stacking context. It will show you the element which is the closest ancestor to the currently selected element, and which also creates a stacking context.
