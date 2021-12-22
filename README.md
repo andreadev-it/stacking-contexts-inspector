@@ -1,5 +1,5 @@
 # Stacking Contexts Inspector
-The Stacking Contexts Inspector is a [devtools extension for Google Chrome](https://chrome.google.com/webstore/detail/css-stacking-context-insp/apjeljpachdcjkgnamgppgfkmddadcki) and [Firefox](https://addons.mozilla.org/en-US/firefox/addon/css-stacking-context-inspector/) that allows you to analyse the stacking contexts available on a webpage. Here you will find all the informations you need to get up and running with using this tool. 
+The Stacking Contexts Inspector is a [devtools extension for Google Chrome](https://chrome.google.com/webstore/detail/css-stacking-context-insp/apjeljpachdcjkgnamgppgfkmddadcki) and [Firefox](https://addons.mozilla.org/en-US/firefox/addon/css-stacking-context-inspector/) that allows you to analyse the stacking contexts available on a webpage. Here you will find all the information you need to get up and running with using this tool. 
 
 This extension will add a **new panel** to the devtools and a **new sidebar** on the elements panel.
 
@@ -25,11 +25,11 @@ When you hover over a context, or have a specific context selected (everywhere w
 If you click on a context, it will be selected and some in-depth information will be shown on the sidepane.
 
 ### The panel sidepane
-The sidepane shows informations related to the stacking context that is currently selected in the tree view. It is divided into two sections: **Info about the context** and **Children z-index order**.
+The sidepane shows information related to the stacking context that is currently selected in the tree view. It is divided into two sections: **Info about the context** and **Children z-index order**.
 
 In the first section, you can see why this DOM element is creating a new stacking context. There might be multiple reasons for this, and all of them will be shown as an unordered list in this section.
 
-In the second section, you can find a list of all the stacking contexts that are children of the selected context. They'll be ordered from the one which is visible on top (higher z-index) to the one that will show behind everything else (lower z-index). It will also show all the elements that have no z-index applied, but have a position of "relative" or "absolute", since this values will slightly alter the order the elements are printed (might be changed in the future). When you hover over the contexts in this view, two buttons will appear on the right (the same as in the tree view). They allow you to inspect the related DOM element or scroll the viewport to show it.
+In the second section, you can find a list of all the stacking contexts that are children of the selected context. They'll be ordered from the one which is visible on top (higher z-index) to the one that will show behind everything else (lower z-index). It will also show all the elements that have no z-index applied, but have a position of "relative" or "absolute", since these values will slightly alter the order the elements are printed (might be changed in the future). When you hover over the contexts in this view, two buttons will appear on the right (the same as in the tree view). They allow you to inspect the related DOM element or scroll the viewport to show it.
 
 ## The Stacking Contexts sidebar in the Elements panel
 When you install this extension, a new sidebar will be added to the right of the elements panel, where you can also find the "Styles", "Computed", "Layout" and other sidebars. It might not be immediatly visible, in that case you can make the sidebar larger to show all options, or click on the "»" button in the top-right to show all the hidden sidebars names.
@@ -44,7 +44,7 @@ The sidebar is divided into multiple sections:
 This section will give you an immediate feedback on whether or not the z-index property is working on the DOM element. If the element selected has no z-index and doesn't create a stacking context, a coherent message will appear.
 
 ### Context details
-This section will show an unordered list that explains why the current element is creating a new stacking context. If you don't want it to be creating a context, you can use these informations to know where to tweak your CSS.
+This section will show an unordered list that explains why the current element is creating a new stacking context. If you don't want it to be creating a context, you can use this information to know where to tweak your CSS.
 
 ### Parent context
 This is very self-explanatory: it just shows which element is the parent stacking context. It will show you the element which is the closest ancestor to the currently selected element, and which also creates a stacking context.
