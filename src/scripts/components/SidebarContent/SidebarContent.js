@@ -33,7 +33,7 @@ const SidebarContent = () => {
     let {contexts, refreshContexts} = useContext(DataContext);
 
     let context = contexts[curNode?.contextId] ?? null;
-    let parentContext = curNode?.createsContext ? context.parent : context;
+    let parentContext = curNode?.createsContext ? context?.parent : context;
 
     const handleInspectedElement = () => {
 
