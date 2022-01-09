@@ -18,6 +18,8 @@ import RefreshIcon from '../../../icons/refresh.svg';
 import WarningIcon from '../../../icons/warning.svg';
 import SVG from '../SVG';
 
+import styles from './SidebarContent.scss';
+
 const SmallSpinner = () => (
     <Spinner position={'relative'} width={50} height={50} />
 )
@@ -98,14 +100,15 @@ const SidebarContent = () => {
             <Section title="Context details">
                 {
                     shouldUpdate && settings["dom-changed-warning"] && (
-                        <>
+                        <div className={styles.domChanged}>
                             <div>
                                 <SVG src={WarningIcon} className="inline-icon" />
                                 <span style={{marginLeft: '4px', color: 'hsl(57deg 100% 36%)'}}>There were some changes in the page.</span>
                             </div>
                             <br />
                             <button class="btn" onClick={() => refreshContextsCache()}>Refresh contexts</button>
-                        </>
+                            <br />
+                        </div>
                     )
                 }
                 {

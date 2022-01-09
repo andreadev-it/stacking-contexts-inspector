@@ -12,7 +12,7 @@ const NodeDetails = ({node}) => {
 
         if (node.createsContext) {
             description = (
-                <span>z-index: <SVG src={CheckIcon} className="inline-icon" title="z-index is working"/></span>
+                <span>Is z-index working: <SVG src={CheckIcon} className="inline-icon" title="z-index is working"/></span>
             );
             // description = "z-index: working";
             additionalInfo = "The z-index property is correctly working in this element. If the result isn't what you are expecting, please head over to the stacking context panel.";
@@ -20,7 +20,7 @@ const NodeDetails = ({node}) => {
 
         if (!node.createsContext && node.zIndex !== "auto") {
             description = (
-                <span>z-index: <SVG src={WrongIcon} className="inline-icon" title="z-index is not working"/></span>
+                <span>Is z-index working: <SVG src={WrongIcon} className="inline-icon" title="z-index is not working"/></span>
             );
             // description = "z-index: not working";
             additionalInfo = "The z-index property is set, but it's not working because this element does not create a new stacking context.";
