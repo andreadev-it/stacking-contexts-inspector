@@ -93,8 +93,16 @@ export const mixBlendMode = new ContextCheck(
 export const notNoneProperties = new ContextCheck(
     "The element has one of the following properties set: transform, filter, perspective, clip-path, mask, maskImage, maskBorder",
     (element, styles) => {
-        let toCheck = [styles.transform, styles.filter, styles.perspective, styles.clipPath, styles.mask, styles.maskImage, styles.maskBorder];
-        return toCheck.some( (prop) => prop !== undefined && prop !== "none" );
+        let toCheck = [
+            styles.transform,
+            styles.filter,
+            styles.perspective,
+            styles.clipPath,
+            styles.mask, styles.webkitMask,
+            styles.maskImage, styles.webkitMaskImage,
+            styles.maskBorder, styles.webkitMaskBoxImage
+        ];
+        return toCheck.some( (prop) => prop !== undefined && prop !== "none" && prop !== "" );
     }
 );
 
