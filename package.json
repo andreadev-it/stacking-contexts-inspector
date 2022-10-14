@@ -1,6 +1,6 @@
 {
     "name": "css-stacking-context-inspector",
-    "version": "1.1.11",
+    "version": "1.1.12",
     "description": "Help inspecting the css stacking contexts and solving the z-index war.",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",

@@ -119,7 +119,15 @@ export const webkitOverflowScrolling = new ContextCheck(
 export const willChange = new ContextCheck(
     "The element has a will-change value with a property that will create a context when its value is not the default one",
     (element, styles) => {
-        let toCheck = ["mix-blend-mode", "transform", "filter", "perspective", "clip-path", "mask", "mask-image", "mask-border"]
+        let toCheck = ["mix-blend-mode",
+            "transform",
+            "filter",
+            "perspective",
+            "clip-path",
+            "mask", "-webkit-mask",
+            "mask-image", "-webkit-mask-image",
+            "mask-border", "-webkit-mask-box-image"
+        ]
         return toCheck.some( (prop) => styles.willChange.includes(prop) );
     }
 );
