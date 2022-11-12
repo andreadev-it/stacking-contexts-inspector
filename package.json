@@ -1,10 +1,10 @@
 {
     "name": "css-stacking-context-inspector",
-    "version": "1.1.12",
+    "version": "1.1.13",
     "description": "Help inspecting the css stacking contexts and solving the z-index war.",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "build-dev": "parcel build src/**/*.html src/scripts/content.js --no-optimize",
+        "build-dev": "parcel build src/scripts/background.js src/**/*.html src/scripts/content.js --no-optimize",
         "build": "parcel build src/**/*.html src/scripts/content.js"
     },
     "author": "Andrea Dragotta <dev@andreadev.it>",
