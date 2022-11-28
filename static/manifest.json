@@ -1,6 +1,6 @@
 {
     "name": "CSS Stacking Context inspector",
-    "version": "1.1.13",
+    "version": "1.1.14",
     "description": "Helps inspecting the css stacking contexts and solving the z-index war.",
     "manifest_version": 3,
     "background": {
@@ -14,7 +14,7 @@
             "js": ["/scripts/content.js"]
         }
     ],
-    "permissions": ["storage"],
+    "permissions": ["storage", "scripting"],
     "host_permissions": ["http://*/*", "https://*/*"],
     "icons": {
         "16": "/assets/icon16.png",
