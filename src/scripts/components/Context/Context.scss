@@ -10,6 +10,14 @@
         background-color: var(--contextHoverBg);
     }
 
+    .contextDescriptor {
+        position: relative;
+    };
+
+    .pseudo {
+        color: var(--elementPseudoColor);
+    }
+
     .contextTag {
         font-weight: bold;
         color: var(--elementTagNameColor);

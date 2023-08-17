@@ -6,7 +6,7 @@ import { getNodeFromPath } from '../../utils/utils';
 
 import InspectIcon from '../../../icons/inspect.svg';
 import IntoviewIcon from '../../../icons/intoview.svg';
-import styles from "./Context.scss";
+import * as styles from "./Context.scss";
 
 const Context = ({context, noHighlight=false, delegatedClass="", ...props}) => {
 
@@ -48,18 +48,24 @@ const Context = ({context, noHighlight=false, delegatedClass="", ...props}) => {
     }
 
     let classNames = `${styles.context} ${delegatedClass}`;
+    let pseudo = context.pseudoElement;
 
     return (
         <div className={classNames} onMouseEnter={() => highlightNode()} onMouseLeave={() => cancelHighlight()} {...props}>
             <div className={styles.contextDescriptor}>
                 <span className={styles.contextTag}>{tagName}</span>
                 {
-                    id && (
+                    pseudo && (
+                        <span className={styles.pseudo}>:{pseudo}</span>
+                    )
+                }
+                {
+                    !pseudo && id && (
                         <span className={styles.contextId}>#{id}</span>
                     )
                 }
                 {
-                    !id && classes && classes.length > 0 && (
+                    !pseudo && !id && classes && classes.length > 0 && (
                         <span className={styles.contextClasses}>.{classes.join('.')}</span>
                     )
                 }

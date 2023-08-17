@@ -26,6 +26,24 @@ function traverse(element, parentContext, isInIframe=false, frame) {
         // set the new context as the parent for this element children
         parentContext = context;
     }
+
+    // Check for pseudoelements (after / before)
+    let beforePassedChecks = getPassedChecks(element, ':before');
+    let afterPassedChecks  = getPassedChecks(element, ':after');
+
+    if (beforePassedChecks.length > 0) {
+        context = new StackingContext(element, isInIframe, frame, parentContext, beforePassedChecks, 'before');
+        parentContext.addChild(context);
+        let id = allContexts.push(context);
+        context.id = id - 1;
+    }
+
+    if (afterPassedChecks.length > 0) {
+        context = new StackingContext(element, isInIframe, frame, parentContext, afterPassedChecks, 'after');
+        parentContext.addChild(context);
+        let id = allContexts.push(context);
+        context.id = id - 1;
+    }
     
     for (let child of element.children) {
         if (element.nodeType == Node.ELEMENT_NODE) {
@@ -94,9 +112,15 @@ function hasTraversableShadowDOM(element) {
  * @param {Node} element The DOM element to check for a stacking context
  * @returns 
  */
-export function getPassedChecks(element) {
-    let styles = window.getComputedStyle(element);
+export function getPassedChecks(element, pseudo) {
+    let styles = window.getComputedStyle(element, pseudo);
     let passed = [];
+
+    if (pseudo) {
+        if (!styles.content || styles.content == 'none') {
+            return [];
+        }
+    }
 
     for (let check of activeChecks) {
         if (check.exec(element, styles)) {

@@ -77,16 +77,9 @@ function saveExtensionSettings(newSettings) {
  * Inject the content script into a tab
  */
 function injectScript(tabId) {
-    return new Promise((resolve, reject) => {
-        chrome.tabs.executeScript(
-            tabId,
-            {
-                file: '/scripts/content.js'
-            },
-            () => {
-                resolve();
-            }
-        );
+    return chrome.scripting.executeScript({
+        target: {tabId},
+        files: ['/scripts/content.js'],
     });
 }
 

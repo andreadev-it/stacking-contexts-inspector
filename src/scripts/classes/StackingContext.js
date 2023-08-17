@@ -15,6 +15,7 @@ class StackingContext {
     parent = null;
     children = [];
     element = null;
+    pseudoElement = null;
 
     passedChecks = []
 
@@ -27,12 +28,13 @@ class StackingContext {
      * @param {StackingContext} parentContext 
      * @param {Array<string>} passedChecks 
      */
-    constructor(element, isInIframe, frame=null, parentContext, passedChecks = []) {
+    constructor(element, isInIframe, frame=null, parentContext, passedChecks = [], pseudoElement = null) {
         this.element = element;
         this.isInIframe = isInIframe ?? false;
         this.frame = frame;
         this.parent = parentContext ?? null;
         this.passedChecks = passedChecks;
+        this.pseudoElement = pseudoElement;
     }
 
     /**
@@ -80,7 +82,8 @@ class StackingContext {
             children: childrenIds,
             element: elementDescription,
             passedChecks: this.passedChecks,
-            isInIframe: this.isInIframe
+            isInIframe: this.isInIframe,
+            pseudoElement: this.pseudoElement
         };
     }
 }
