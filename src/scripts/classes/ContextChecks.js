@@ -66,6 +66,18 @@ export const zIndexWithPosition = new ContextCheck(
     }
 );
 
+export const containerTypeisSizeOrInlineSize = new ContextCheck(
+    "The element has a container-type set to 'size' or 'inline-size'",
+    (element, styles) => {
+        if (styles.containerType == "size" ||
+            styles.containerType == "inline-size")
+        {
+            return true;
+        }
+        return false;
+    }
+);
+
 export const notFullOpacity = new ContextCheck(
     "The element has an opacity value smaller than 1",
     (element, styles) => {
@@ -174,6 +186,7 @@ export const gridChildWithZIndex = new ContextCheck(
 export const activeChecks = [
     positionFixedSticky,
     zIndexWithPosition,
+    containerTypeisSizeOrInlineSize,
     notFullOpacity,
     mixBlendMode,
     notNoneProperties,
