@@ -42,21 +42,9 @@ export class ContextCheck {
  * https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Positioning/Understanding_z_index/The_stacking_context
  */
 
-export const positionFixedSticky = new ContextCheck(
-    "The element position has the value 'fixed' or 'sticky'",
-    (element, styles) => {
-        if (styles.position == "fixed" ||
-            styles.position == "sticky")
-        {
-            return true;
-        }
-        return false;
-    }
-);
-
 export const zIndexWithPosition = new ContextCheck(
     "The element has a z-index set and the position is not 'static'",
-    (element, styles) => {
+    (_element, styles) => {
         if (styles.position !== "static" &&
             styles.zIndex !== "auto")
         {
@@ -66,11 +54,11 @@ export const zIndexWithPosition = new ContextCheck(
     }
 );
 
-export const containerTypeisSizeOrInlineSize = new ContextCheck(
-    "The element has a container-type set to 'size' or 'inline-size'",
-    (element, styles) => {
-        if (styles.containerType == "size" ||
-            styles.containerType == "inline-size")
+export const positionFixedSticky = new ContextCheck(
+    "The element position has the value 'fixed' or 'sticky'",
+    (_element, styles) => {
+        if (styles.position == "fixed" ||
+            styles.position == "sticky")
         {
             return true;
         }
@@ -78,77 +66,13 @@ export const containerTypeisSizeOrInlineSize = new ContextCheck(
     }
 );
 
-export const notFullOpacity = new ContextCheck(
-    "The element has an opacity value smaller than 1",
-    (element, styles) => {
-
-        if (styles.opacity == "auto") return false;
-        
-        let opacity = parseFloat(styles.opacity);
-        
-        if (isNaN(opacity) || opacity == 1) return false;
-        
-        return true;
-    }
-);
-
-export const mixBlendMode = new ContextCheck(
-    "The element has a non-default mix blend mode value",
-    (element, styles) => {
-        if (styles.mixBlendMode !== "normal") {
-            return true;
-        }
-        return false;
-    }
-);
-
-export const notNoneProperties = new ContextCheck(
-    "The element has one of the following properties set: transform, filter, perspective, clip-path, mask, maskImage, maskBorder",
-    (element, styles) => {
-        let toCheck = [
-            styles.transform,
-            styles.filter,
-            styles.perspective,
-            styles.clipPath,
-            styles.mask, styles.webkitMask,
-            styles.maskImage, styles.webkitMaskImage,
-            styles.maskBorder, styles.webkitMaskBoxImage
-        ];
-        return toCheck.some( (prop) => prop !== undefined && prop !== "none" && prop !== "" );
-    }
-);
-
-export const isolationSet = new ContextCheck(
-    "The element has the isolation property set to 'isolate'",
-    (element, styles) => styles.isolation == "isolate"
-);
-
-export const webkitOverflowScrolling = new ContextCheck(
-    "The element has the webkit-overflow-scrolling property set to 'touch'",
-    (element, styles) => styles.webkitOverflowScrolling == "touch"
-);
-
-export const willChange = new ContextCheck(
-    "The element has a will-change value with a property that will create a context when its value is not the default one",
-    (element, styles) => {
-        let toCheck = ["mix-blend-mode",
-            "transform",
-            "filter",
-            "perspective",
-            "clip-path",
-            "mask", "-webkit-mask",
-            "mask-image", "-webkit-mask-image",
-            "mask-border", "-webkit-mask-box-image"
-        ]
-        return toCheck.some( (prop) => styles.willChange.includes(prop) );
-    }
-);
-
-export const containValue = new ContextCheck(
-    "The element has a contain value that includes one of the following: layout, paint (or a composite value like 'strict' or 'content')",
-    (element, styles) => {
-        let toCheck = ["layout", "paint", "strict", "content"];
-        return toCheck.some( (prop) => styles.contain.includes(prop) );
+export const containerTypeIsSizeOrInlineSize = new ContextCheck(
+    "The element has a container-type set to 'size' or 'inline-size'",
+    (_element, styles) => {
+        return (
+            styles.containerType == "size" ||
+            styles.containerType == "inline-size"
+        );
     }
 );
 
@@ -180,20 +104,94 @@ export const gridChildWithZIndex = new ContextCheck(
     }
 );
 
+export const notFullOpacity = new ContextCheck(
+    "The element has an opacity value smaller than 1",
+    (_element, styles) => {
+
+        if (styles.opacity == "auto") return false;
+        
+        let opacity = parseFloat(styles.opacity);
+        
+        if (isNaN(opacity) || opacity == 1) return false;
+        
+        return true;
+    }
+);
+
+export const mixBlendMode = new ContextCheck(
+    "The element has a non-default mix blend mode value",
+    (_element, styles) => {
+        if (styles.mixBlendMode !== "normal") {
+            return true;
+        }
+        return false;
+    }
+);
+
+export const notNoneProperties = new ContextCheck(
+    "The element has one of the following properties set: transform, filter, perspective, clip-path, mask, maskImage, maskBorder",
+    (_element, styles) => {
+        let toCheck = [
+            styles.transform,
+            styles.filter,
+            styles.perspective,
+            styles.clipPath,
+            styles.mask, styles.webkitMask,
+            styles.maskImage, styles.webkitMaskImage,
+            styles.maskBorder, styles.webkitMaskBoxImage
+        ];
+        return toCheck.some( (prop) => prop !== undefined && prop !== "none" && prop !== "" );
+    }
+);
+
+export const isolationSet = new ContextCheck(
+    "The element has the isolation property set to 'isolate'",
+    (_element, styles) => styles.isolation == "isolate"
+);
+
+export const willChange = new ContextCheck(
+    "The element has a will-change value with a property that will create a context when its value is not the default one",
+    (_element, styles) => {
+        let toCheck = ["mix-blend-mode",
+            "transform",
+            "filter",
+            "perspective",
+            "clip-path",
+            "mask", "-webkit-mask",
+            "mask-image", "-webkit-mask-image",
+            "mask-border", "-webkit-mask-box-image"
+        ]
+        return toCheck.some( (prop) => styles.willChange.includes(prop) );
+    }
+);
+
+export const containValue = new ContextCheck(
+    "The element has a contain value that includes one of the following: layout, paint (or a composite value like 'strict' or 'content')",
+    (_element, styles) => {
+        let toCheck = ["layout", "paint", "strict", "content"];
+        return toCheck.some( (prop) => styles.contain.includes(prop) );
+    }
+);
+
+export const webkitOverflowScrolling = new ContextCheck(
+    "The element has the webkit-overflow-scrolling property set to 'touch'",
+    (_element, styles) => styles.webkitOverflowScrolling == "touch"
+);
+
 /**
  * A list of checks that will be fired on the elements.
  */
 export const activeChecks = [
-    positionFixedSticky,
     zIndexWithPosition,
-    containerTypeisSizeOrInlineSize,
+    positionFixedSticky,
+    containerTypeIsSizeOrInlineSize,
+    flexChildWithZIndex,
+    gridChildWithZIndex,
     notFullOpacity,
     mixBlendMode,
     notNoneProperties,
     isolationSet,
-    webkitOverflowScrolling,
     willChange,
     containValue,
-    flexChildWithZIndex,
-    gridChildWithZIndex
+    webkitOverflowScrolling,
 ];
